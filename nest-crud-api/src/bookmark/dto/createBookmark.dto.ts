@@ -1,6 +1,9 @@
+import { MinLength } from 'class-validator';
 export class CreateBookmarkDto {
-  readonly id?: number;
-  readonly title: string;
-  readonly url: string;
-  readonly category: string;
+  id?: number;
+  title: string;
+  url: string;
+
+  @MinLength(3)
+  category: string;
 }

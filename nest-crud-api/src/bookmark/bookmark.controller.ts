@@ -1,18 +1,22 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
-  Delete,
-  Param,
   Query,
-  Body,
+  UseGuards,
 } from '@nestjs/common';
+import { ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
+import { BookmarkService } from './bookmark.services';
 import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { UpdateBookmarkDto } from './dto/updateBookmark.dto';
-import { BookmarkService } from './bookmark.services';
+import { AuthenticatedGuard } from 'src/authenticated/authenticated.guard';
 
 @Controller('bookmark')
+@UseGuards(AuthenticatedGuard)
 export class BookmarkController {
   constructor(private readonly bookmarkService: BookmarkService) {}
 
@@ -31,28 +35,30 @@ export class BookmarkController {
 
   // GET single Bookmarks
   @Get(':id')
-  getSingleBookmarks(@Param('id') id: string) {
-    return this.bookmarkService.getBookmark(+id);
+  getSingleBookmarks(@Param('id', ParseIntPipe) id: number) {
+    return this.bookmarkService.getBookmark(id);
   }
 
   // Create Bookmark
   @Post()
-  createBookmarks(@Body() bookmarkDetails: CreateBookmarkDto) {
+  createBookmarks(
+    @Body(new ValidationPipe()) bookmarkDetails: CreateBookmarkDto,
+  ) {
     return this.bookmarkService.createBookmark(bookmarkDetails);
   }
 
   // update Bookmark
   @Put(':id')
   updateBookmarks(
-    @Param('id') id: string,
-    @Body() bookmarkDetails: UpdateBookmarkDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Body(new ValidationPipe()) bookmarkDetails: UpdateBookmarkDto,
   ) {
-    return this.bookmarkService.updateBookmark(+id, bookmarkDetails);
+    return this.bookmarkService.updateBookmark(id, bookmarkDetails);
   }
 
-  // Delte Bookmark
+  // Delete Bookmark
   @Delete(':id')
-  deleteBookmarks(@Param('id') id: string) {
-    return this.bookmarkService.deleteBookmark(+id);
+  deleteBookmarks(@Param('id', ParseIntPipe) id: number) {
+    return this.bookmarkService.deleteBookmark(id);
   }
 }

@@ -1,5 +1,8 @@
+import { MinLength } from 'class-validator';
+
 export class UpdateBookmarkDto {
-  readonly title?: string;
-  readonly url?: string;
-  readonly category?: string;
+  title?: string;
+  url?: string;
+  @MinLength(3)
+  category?: string;
 }

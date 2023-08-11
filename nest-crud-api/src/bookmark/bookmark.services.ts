@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { UpdateBookmarkDto } from './dto/updateBookmark.dto';
+import { NotFoundException } from '@nestjs/common/exceptions';
 
 @Injectable({})
 export class BookmarkService {
@@ -13,12 +14,14 @@ export class BookmarkService {
   }
 
   getBookmark(id: number) {
-    const bookmark = bookmarks.find((obj) => obj.id === (id as any));
+    try {
+      const bookmark = bookmarks.find((obj) => obj.id === (id as any));
 
-    if (bookmark) {
-      return bookmark;
-    } else {
-      throw new Error('Bookmark Not Found');
+      if (bookmark) {
+        return bookmark;
+      }
+    } catch (error) {
+      throw new NotFoundException();
     }
   }
 
@@ -28,15 +31,19 @@ export class BookmarkService {
   }
 
   updateBookmark(id: number, updatedDetails: UpdateBookmarkDto) {
-    const updates = bookmarks.map((bookmark) => {
-      if (bookmark.id === (id as any)) {
-        return { ...bookmark, ...updatedDetails };
-      }
-      return bookmark;
-    });
+    try {
+      const updates = bookmarks.map((bookmark) => {
+        if (bookmark.id === (id as any)) {
+          return { ...bookmark, ...updatedDetails };
+        }
+        return bookmark;
+      });
 
-    return updates.find((item) => item.id === (id as any));
-    // return this.getBookmark(id);
+      return updates.find((item) => item.id === (id as any));
+      // return this.getBookmark(id);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
   deleteBookmark(id: number) {
