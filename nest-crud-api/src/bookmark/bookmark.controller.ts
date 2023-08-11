@@ -14,16 +14,19 @@ export class BookmarkController {
     return { id: id };
   }
 
+  // Create Bookmark
   @Post()
   createBookmarks() {
     return 'Add Bookmark';
   }
 
+  // update Bookmark
   @Put(':id')
   updateBookmarks(@Param('id') id: string | number) {
     return { id: id };
   }
 
+  // Delte Bookmark
   @Delete(':id')
   deleteBookmarks(@Param('id') id: string | number) {
     return { id: id };
