@@ -10,19 +10,17 @@ import {
 } from '@nestjs/common';
 import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { UpdateBookmarkDto } from './dto/updateBookmark.dto';
+import { BookmarkService } from './bookmark.services';
 
 @Controller('bookmark')
 export class BookmarkController {
+  constructor(private readonly bookmarkService: BookmarkService) {}
+
   // GET Bookmarks from query params
   @Get()
-  getBookmarksFromQuery(@Query('type') type: string | number) {
-    console.log(type);
-
-    if (type) {
-      return [{ type }];
-    } else {
-      return 'Get All Bookmarks';
-    }
+  getBookmarksFromQuery(@Query('category') category: string) {
+    // const service = new BookmarkService();
+    return this.bookmarkService.getBookmarks(category);
   }
 
   // GET all Bookmarks
@@ -33,28 +31,28 @@ export class BookmarkController {
 
   // GET single Bookmarks
   @Get(':id')
-  getSingleBookmarks(@Param('id') id: string | number) {
-    return { id: id };
+  getSingleBookmarks(@Param('id') id: string) {
+    return this.bookmarkService.getBookmark(+id);
   }
 
   // Create Bookmark
   @Post()
   createBookmarks(@Body() bookmarkDetails: CreateBookmarkDto) {
-    return bookmarkDetails;
+    return this.bookmarkService.createBookmark(bookmarkDetails);
   }
 
   // update Bookmark
   @Put(':id')
   updateBookmarks(
-    @Param('id') id: string | number,
+    @Param('id') id: string,
     @Body() bookmarkDetails: UpdateBookmarkDto,
   ) {
-    return { id: id, ...bookmarkDetails };
+    return this.bookmarkService.updateBookmark(+id, bookmarkDetails);
   }
 
   // Delte Bookmark
   @Delete(':id')
-  deleteBookmarks(@Param('id') id: string | number) {
-    return { id: id };
+  deleteBookmarks(@Param('id') id: string) {
+    return this.bookmarkService.deleteBookmark(+id);
   }
 }

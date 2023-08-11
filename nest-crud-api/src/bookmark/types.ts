@@ -1,5 +1,6 @@
-export type Bookmark = {
-  id: number;
+export type BookmarkT = {
+  id?: number;
   title: string;
   url: string;
+  category: string;
 };
