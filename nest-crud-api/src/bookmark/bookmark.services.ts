@@ -19,6 +19,8 @@ export class BookmarkService {
 
       if (bookmark) {
         return bookmark;
+      } else {
+        throw new NotFoundException();
       }
     } catch (error) {
       throw new NotFoundException();
@@ -47,7 +49,16 @@ export class BookmarkService {
   }
 
   deleteBookmark(id: number) {
-    return bookmarks.filter((site) => site.id !== (id as any));
+    try {
+      const bookmark = bookmarks.find((obj) => obj.id === (id as any));
+      if (bookmark) {
+        return bookmarks.filter((site) => site.id !== (id as any));
+      } else {
+        throw new NotFoundException();
+      }
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 }
 

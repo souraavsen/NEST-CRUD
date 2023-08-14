@@ -14,7 +14,14 @@ import { BookmarkService } from './bookmark.services';
 import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { UpdateBookmarkDto } from './dto/updateBookmark.dto';
 import { AuthenticatedGuard } from 'src/authenticated/authenticated.guard';
+import {
+  ApiTags,
+  ApiQuery,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('Bookmarks')
 @Controller('bookmark')
 @UseGuards(AuthenticatedGuard)
 export class BookmarkController {
@@ -22,19 +29,20 @@ export class BookmarkController {
 
   // GET Bookmarks from query params
   @Get()
+  // @ApiOkResponse({
+  //   type: CreateBookmarkDto,
+  //   description: 'Get bookmarks',
+  // })
+  @ApiNotFoundResponse()
+  @ApiQuery({ name: 'category', required: false })
   getBookmarksFromQuery(@Query('category') category: string) {
     // const service = new BookmarkService();
     return this.bookmarkService.getBookmarks(category);
   }
 
-  // GET all Bookmarks
-  @Get()
-  getBookmarks() {
-    return 'Get All Bookmarks';
-  }
-
   // GET single Bookmarks
   @Get(':id')
+  @ApiNotFoundResponse()
   getSingleBookmarks(@Param('id', ParseIntPipe) id: number) {
     return this.bookmarkService.getBookmark(id);
   }
@@ -49,6 +57,7 @@ export class BookmarkController {
 
   // update Bookmark
   @Put(':id')
+  @ApiNotFoundResponse()
   updateBookmarks(
     @Param('id', ParseIntPipe) id: number,
     @Body(new ValidationPipe()) bookmarkDetails: UpdateBookmarkDto,
@@ -58,6 +67,7 @@ export class BookmarkController {
 
   // Delete Bookmark
   @Delete(':id')
+  @ApiNotFoundResponse()
   deleteBookmarks(@Param('id', ParseIntPipe) id: number) {
     return this.bookmarkService.deleteBookmark(id);
   }
