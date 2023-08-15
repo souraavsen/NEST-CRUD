@@ -2,9 +2,58 @@ import { Injectable } from '@nestjs/common';
 import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { UpdateBookmarkDto } from './dto/updateBookmark.dto';
 import { NotFoundException } from '@nestjs/common/exceptions';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Bookmarks } from './bookmark.entity';
+import { Repository } from 'typeorm';
 
 @Injectable({})
 export class BookmarkService {
+  constructor(
+    @InjectRepository(Bookmarks)
+    private bookmarkRepository: Repository<Bookmarks>,
+  ) {}
+
+  create(createBookmarkDto: CreateBookmarkDto) {
+    const newBookmark = this.bookmarkRepository.create(createBookmarkDto);
+    return this.bookmarkRepository.save(newBookmark);
+  }
+
+  findAll(category: string) {
+    console.log(category);
+    console.log(this.bookmarkRepository.findBy({ category }));
+
+    return this.bookmarkRepository.findBy({ category });
+  }
+
+  findOne(id: number) {
+    return this.bookmarkRepository.findOneBy({ id });
+  }
+
+  async updateOne(id: number, updateBookmarkDto: UpdateBookmarkDto) {
+    // return this.bookmarkRepository.update(id, updateBookmarkDto);
+
+    const bookmark = await this.findOne(id);
+    if (bookmark) {
+      return this.bookmarkRepository.save({
+        ...bookmark,
+        ...updateBookmarkDto,
+      });
+    } else {
+      throw new NotFoundException();
+    }
+  }
+  async removeOne(id: number) {
+    // return this.bookmarkRepository.delete(id);
+
+    const bookmark = await this.findOne(id);
+    if (bookmark) {
+      return this.bookmarkRepository.remove(bookmark);
+    } else {
+      throw new NotFoundException();
+    }
+  }
+
+  // ======================== Using Constant Data ========================
   getBookmarks(category: string) {
     if (category) {
       return bookmarks.filter((site) => site.category === category);
