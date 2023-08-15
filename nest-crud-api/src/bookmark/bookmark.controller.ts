@@ -17,7 +17,7 @@ import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { UpdateBookmarkDto } from './dto/updateBookmark.dto';
 
 @ApiTags('Bookmarks')
-@Controller('bookmark')
+@Controller('api/bookmarks')
 @UseGuards(AuthenticatedGuard)
 export class BookmarkController {
   constructor(private readonly bookmarkService: BookmarkService) {}
