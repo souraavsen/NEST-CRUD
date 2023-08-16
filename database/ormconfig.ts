@@ -2,7 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceOption: DataSourceOptions = {
   type: 'sqlite',
-  database: 'BookmarkDB',
+  database: `${process.env.DB_NAME}`,
   entities: ['dist/src/**/*.entity{.js,.ts}'],
   synchronize: false,
   migrations: ['dist/database/migrations/**{.js,.ts}'],

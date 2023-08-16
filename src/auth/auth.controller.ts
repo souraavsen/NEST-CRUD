@@ -58,7 +58,7 @@ export class AuthController {
   }
 
   @Get('user')
-  async Authenticateduser(@Req() request: Request) {
+  async authenticateduser(@Req() request: Request) {
     try {
       const cookie = request.cookies['jwt'];
       const userData = await this.jwtService.verifyAsync(cookie);
@@ -75,4 +75,15 @@ export class AuthController {
       throw new UnauthorizedException();
     }
   }
+
+  @Post("/logout")
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie("jwt")
+
+    return {
+      message:"Loggedout Successfully"
+    }
+  }
+
+  
 }
