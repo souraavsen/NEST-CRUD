@@ -19,9 +19,6 @@ export class BookmarkService {
   }
 
   findAll(category: string) {
-    console.log(category);
-    console.log(this.bookmarkRepository.findBy({ category }));
-
     return this.bookmarkRepository.findBy({ category });
   }
 

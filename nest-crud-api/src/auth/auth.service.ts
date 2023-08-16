@@ -13,16 +13,17 @@ export class AuthService {
   ) {}
 
   async create(userDetails: CreateUserDto) {
-    const isUserExist = this.userRepository.findOneBy({
+    const isUserExist = await this.userRepository.findOneBy({
       username: userDetails.username,
     });
+
     if (!isUserExist) return this.userRepository.save(userDetails);
     else {
-      throw new NotAcceptableException();
+      throw new NotAcceptableException('Username or Email already exist');
     }
   }
 
-  async findOne(reqUsername: string): Promise<User> {
-    return this.userRepository.findOneBy({ username: reqUsername });
+  async findOne(reqUsername: any): Promise<User> {
+    return await this.userRepository.findOneBy(reqUsername);
   }
 }

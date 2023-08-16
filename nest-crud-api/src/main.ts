@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger/dist';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,9 +15,11 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.use(cookieParser());
+
   const swaggerConf = new DocumentBuilder()
-    .setTitle('Nest CRUD API')
-    .setDescription('This a NEST api expample')
+    .setTitle('Bookmarks API')
+    .setDescription('This a NEST api expample on Bookmark')
     .setVersion('1.0')
     .build();
 
