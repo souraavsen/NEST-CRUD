@@ -3,7 +3,7 @@ import { CreateBookmarkDto } from './dto/createBookmark.dto';
 import { UpdateBookmarkDto } from './dto/updateBookmark.dto';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Bookmarks } from './bookmark.entity';
+import { Bookmarks } from './entities/bookmark.entity';
 import { Repository } from 'typeorm';
 
 @Injectable({})

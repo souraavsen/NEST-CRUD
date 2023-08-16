@@ -9,6 +9,11 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+
   const swaggerConf = new DocumentBuilder()
     .setTitle('Nest CRUD API')
     .setDescription('This a NEST api expample')
