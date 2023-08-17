@@ -24,16 +24,19 @@ export class BookmarkController {
 
   // GET Bookmarks from query params
   @Get()
-  // @ApiOkResponse({
-  //   type: CreateBookmarkDto,
-  //   description: 'Get bookmarks',
-  // })
   @ApiNotFoundResponse()
   @ApiQuery({ name: 'category', required: false })
   async getBookmarksFromQuery(@Query('category') category: string) {
     // const service = new BookmarkService();
     return await this.bookmarkService.findAll(category);
     // return this.bookmarkService.getBookmarks(category);
+  }
+
+  // GET all Categories
+  @Get('categories')
+  @ApiNotFoundResponse()
+  getCategories() {
+    return this.bookmarkService.findAllCategories();
   }
 
   // GET single Bookmarks

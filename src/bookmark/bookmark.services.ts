@@ -22,6 +22,15 @@ export class BookmarkService {
     return this.bookmarkRepository.findBy({ category });
   }
 
+  async findAllCategories() {
+    const allBookmarks = await this.bookmarkRepository.find();
+    const categories = allBookmarks.map((bookmark) => {
+      return bookmark.category;
+    });
+
+    return [...new Set(categories)];
+  }
+
   findOne(id: number) {
     return this.bookmarkRepository.findOneBy({ id });
   }
