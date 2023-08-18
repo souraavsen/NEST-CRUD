@@ -26,20 +26,41 @@ export class BookmarkController {
   @Get()
   @ApiNotFoundResponse()
   @ApiQuery({ name: 'category', required: false })
+  /**
+   * Retrieves bookmarks based on the provided query parameter `category`.
+   *
+   * @param category The category of the bookmarks to retrieve.
+   * @returns An array of bookmarks that match the provided `category`.
+   */
+  /**
+   * Retrieves bookmarks based on the provided query parameter `category`.
+   *
+   * @param category - The category of the bookmarks to retrieve.
+   * @returns An array of bookmarks that match the provided `category`.
+   */
   async getBookmarksFromQuery(@Query('category') category: string) {
-    // const service = new BookmarkService();
     return await this.bookmarkService.findAll(category);
-    // return this.bookmarkService.getBookmarks(category);
   }
 
   // GET all Categories
+  /**
+   * Retrieves all categories of bookmarks.
+   *
+   * @returns An array of categories representing different categories of bookmarks.
+   * @throws {NotFoundException} If no categories are found.
+   */
   @Get('categories')
   @ApiNotFoundResponse()
   getCategories() {
     return this.bookmarkService.findAllCategories();
   }
 
-  // GET single Bookmarks
+  /**
+   * Retrieves a single bookmark based on the provided id.
+   *
+   * @param id - The id of the bookmark to retrieve.
+   * @returns The bookmark with the specified id.
+   */
   @Get(':id')
   @ApiNotFoundResponse()
   getSingleBookmarks(@Param('id', ParseIntPipe) id: number) {
@@ -47,7 +68,13 @@ export class BookmarkController {
     // return this.bookmarkService.getBookmark(id);
   }
 
-  // Create Bookmark
+  /**
+   * Creates a new bookmark.
+   * 
+   * @param bookmarkDetails - An object containing the details of the bookmark to be created.
+   *                          It should have the properties `title`, `url`, and `category`.
+   * @returns The created bookmark object.
+   */
   @Post()
   createBookmarks(
     @Body(new ValidationPipe()) bookmarkDetails: CreateBookmarkDto,
@@ -56,7 +83,14 @@ export class BookmarkController {
     // return this.bookmarkService.createBookmark(bookmarkDetails);
   }
 
-  // update Bookmark
+  /**
+   * Updates a bookmark with the provided id.
+   * 
+   * @param id - The id of the bookmark to be updated.
+   * @param bookmarkDetails - An object containing the updated details of the bookmark.
+   *                          It should have the properties `title`, `url`, and `category`.
+   * @returns The updated bookmark object.
+   */
   @Put(':id')
   @ApiNotFoundResponse()
   updateBookmarks(
@@ -67,11 +101,19 @@ export class BookmarkController {
     // return this.bookmarkService.updateBookmark(id, bookmarkDetails);
   }
 
-  // Delete Bookmark
-  @Delete(':id')
-  @ApiNotFoundResponse()
-  deleteBookmarks(@Param('id', ParseIntPipe) id: number) {
-    return this.bookmarkService.removeOne(id);
-    // return this.bookmarkService.deleteBookmark(id);
-  }
+  /**
+     * Deletes a bookmark with the specified id.
+     * 
+     * @param id - The id of the bookmark to be deleted.
+     * @returns The deleted bookmark object.
+     */
+    @Delete(':id')
+    @ApiNotFoundResponse()
+    deleteBookmarks(@Param('id', ParseIntPipe) id: number) {
+      try {
+        return this.bookmarkService.removeOne(id);
+      } catch (error) {
+        throw new Error('Failed to delete bookmark');
+      }
+    }
 }
